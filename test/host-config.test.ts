@@ -22,6 +22,8 @@ import {
   slate,
   cursor,
   openclaw,
+  windsurf,
+  devin,
 } from '../hosts/index';
 import { HOST_PATHS } from '../scripts/resolvers/types';
 import { RESOLVERS } from '../scripts/resolvers';
@@ -32,8 +34,8 @@ const RESOLVER_NAMES = new Set(Object.keys(RESOLVERS));
 // ─── hosts/index.ts ─────────────────────────────────────────
 
 describe('hosts/index.ts', () => {
-  test('ALL_HOST_CONFIGS has 10 hosts', () => {
-    expect(ALL_HOST_CONFIGS.length).toBe(10);
+  test('ALL_HOST_CONFIGS has 12 hosts', () => {
+    expect(ALL_HOST_CONFIGS.length).toBe(12);
   });
 
   test('ALL_HOST_NAMES matches config names', () => {
@@ -55,6 +57,8 @@ describe('hosts/index.ts', () => {
     expect(slate.name).toBe('slate');
     expect(cursor.name).toBe('cursor');
     expect(openclaw.name).toBe('openclaw');
+    expect(windsurf.name).toBe('windsurf');
+    expect(devin.name).toBe('devin');
   });
 
   test('getHostConfig returns correct config', () => {
