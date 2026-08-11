@@ -17,6 +17,8 @@ hosts/
 ├── slate.ts         # Slate (Random Labs)
 ├── cursor.ts        # Cursor
 ├── openclaw.ts      # OpenClaw (hybrid: config + adapter)
+├── windsurf.ts      # Windsurf (Codeium Cascade)
+├── devin.ts         # Devin (Cognition)
 └── index.ts         # Registry: imports all, derives Host type
 ```
 
@@ -29,7 +31,11 @@ Each config file exports a `HostConfig` object that tells the generator:
 - What assets to symlink at install time
 
 The generator, setup script, platform-detect, uninstall, health checks, worktree
-copy, and tests all read from these configs. None of them have per-host code.
+copy, and tests all read from these configs. The generator/setup codegen path has
+no per-host code. The `./setup` *installer* has per-host blocks for the hosts that
+support one-click install (`codex`, `factory`, `opencode`, `kiro`, `windsurf`,
+`devin`); hosts that ship codegen-only (`cursor`, `slate`) are configured but
+install via `bun run gen:skill-docs --host <name>`.
 
 ## Step-by-step: add a new host
 
