@@ -119,11 +119,25 @@ Or target a specific agent with `./setup --host <name>`:
 | Factory Droid | `--host factory` | `~/.factory/skills/gstack-*/` |
 | Slate | `--host slate` | `~/.slate/skills/gstack-*/` |
 | Kiro | `--host kiro` | `~/.kiro/skills/gstack-*/` |
+| Windsurf (Codeium) | `--host windsurf` | `~/.windsurf/skills/gstack-*/` |
+| Devin (Cognition) | `--host devin` | `~/.devin/skills/gstack-*/` |
 | Hermes | `--host hermes` | `~/.hermes/skills/gstack-*/` |
 | GBrain (mod) | `--host gbrain` | `~/.gbrain/skills/gstack-*/` |
 
 **Want to add support for another agent?** See [docs/ADDING_A_HOST.md](docs/ADDING_A_HOST.md).
 It's one TypeScript config file, zero code changes.
+
+**Native agent entry points.** Two agents also get a repo-root file they
+auto-read on every session, so they pick up gstack with zero install friction:
+
+| Agent | File | What it does |
+|-------|------|--------------|
+| Windsurf (Codeium Cascade) | `.windsurfrules` | Cascade auto-reads it as project rules; points it at the gstack roles |
+| Devin (Cognition) | `devin.md` | Devin auto-reads it as project guidelines; points it at the gstack roles |
+
+Both files just route the agent to the generated skill docs under
+`.windsurf/skills/` / `.devin/skills/` (or `~/.windsurf/skills/`, `~/.devin/skills/`
+after `./setup --host windsurf|devin`).
 
 ## See it work
 
