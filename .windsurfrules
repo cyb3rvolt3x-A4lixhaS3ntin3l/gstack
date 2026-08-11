@@ -1,0 +1,79 @@
+# gstack for Windsurf (Codeium Cascade)
+
+> gstack is Garry Tan's open-source "software factory" — 23 specialist roles
+> (CEO reviewer, eng manager, designer, QA lead, release engineer, security
+> officer, …) plus power tools, all as Markdown skills. This file wires those
+> roles into Windsurf's Cascade agent.
+
+## Setup (one time)
+
+```bash
+# requires: git, Bun (https://bun.sh), Node.js
+git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git ~/.windsurf/skills/gstack
+cd ~/.windsurf/skills/gstack && ./setup --host windsurf
+```
+
+This installs gstack's Windsurf skill docs into `~/.windsurf/skills/` and
+symlinks the runtime assets (`bin/`, `browse/dist/`, `review/`, …) into
+`~/.windsurf/skills/gstack/` so generated skill preambles can resolve
+`$GSTACK_ROOT`, `$GSTACK_BIN`, `$GSTACK_BROWSE`.
+
+To get the skill docs committed into **this** repo for your whole team
+(recommended):
+
+```bash
+~/.windsurf/skills/gstack/bin/gstack-team-init required
+git add .windsurf/ AGENTS.md && git commit -m "require gstack for AI-assisted work"
+```
+
+## How to use gstack from Cascade
+
+Talk to Cascade naturally and ask it to load a gstack role. Each role is a
+self-contained instruction file under `~/.windsurf/skills/gstack-<role>/SKILL.md`
+(or `.windsurf/skills/gstack-<role>/SKILL.md` in this repo).
+
+| You say | gstack role |
+|---------|-------------|
+| "Plan this feature with gstack" | load `gstack-autoplan` (CEO → design → eng → DX review) |
+| "Office-hours on this idea" | load `gstack-office-hours` |
+| "Review this branch with gstack" | load `gstack-review` |
+| "QA the staging URL" | load `gstack-qa` (opens a real browser) |
+| "Ship this branch" | load `gstack-ship` (test → review → push → PR) |
+| "Security audit this repo" | load `gstack-cso` (OWASP Top 10 + STRIDE) |
+| "Investigate this bug" | load `gstack-investigate` |
+| "Lock edits to src/" | load `gstack-freeze` / `gstack-guard` |
+
+Full role catalog: see `AGENTS.md` (cross-agent) or run
+`~/.windsurf/skills/gstack/bin/gstack-config` after install.
+
+## Workflow that works in Windsurf
+
+1. **Plan before code.** `gstack-office-hours` → `gstack-autoplan`. Save the
+   plan; don't implement yet.
+2. **Implement.** Write the code. Use `gstack-careful`/`gstack-freeze` to scope
+   edits when the task must not touch other directories.
+3. **Review.** `gstack-review` finds bugs that pass CI but break in production.
+4. **QA.** `gstack-qa` drives a real Chromium browser against your staging URL.
+5. **Ship.** `gstack-ship` runs tests, opens a PR; `gstack-land-and-deploy`
+   merges, waits for CI + deploy, verifies prod health.
+
+## Conventions Cascade must follow
+
+- gstack skills are **generated** Markdown — read them, don't edit them. Edit
+  the `.tmpl` sources and run `bun run gen:skill-docs --host windsurf`.
+- The browse binary provides headless browser access. Inside a skill, use
+  `$B <command>` (the preamble exports `$B`).
+- State paths resolve via `bin/gstack-paths` (honor `GSTACK_HOME`).
+- Safety skills (`careful`, `freeze`, `guard`) are advisory — **always confirm
+  with the user before destructive operations** (rm -rf, DROP TABLE, force-push).
+- Stay focused on repository code. Do NOT read or execute skill definitions
+  installed for other AI systems under `~/.claude/`, `~/.codex/`, `~/.kiro/`,
+  `.agents/`, `.claude/skills/` — they are not meant for Windsurf and will waste
+  your time. Your gstack docs live under `~/.windsurf/skills/` and
+  `.windsurf/skills/`.
+
+## Upgrade
+
+```bash
+~/.windsurf/skills/gstack/bin/gstack-upgrade   # or re-run ./setup --host windsurf
+```
